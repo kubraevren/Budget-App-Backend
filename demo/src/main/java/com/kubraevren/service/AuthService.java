@@ -7,6 +7,8 @@ import com.kubraevren.model.UserEntity;
 import com.kubraevren.repository.UserRepository;
 import com.kubraevren.security.CustomUserDetails;
 import com.kubraevren.security.JwtService;
+import com.kubraevren.wrappper.BaseException;
+import com.kubraevren.wrappper.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +29,7 @@ public class AuthService {
 
     public void register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Kullanıcı adı zaten kullanımda.");
+            throw new BaseException(ResponseMessage.USER_ALREADY_REGISTERED);
         }
 
         UserEntity user = new UserEntity();

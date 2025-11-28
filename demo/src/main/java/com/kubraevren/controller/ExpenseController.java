@@ -1,10 +1,8 @@
 package com.kubraevren.controller;
-
 import com.kubraevren.dto.ExpenseCreateDto;
 import com.kubraevren.dto.ExpenseDto;
 import com.kubraevren.mapper.ExpenseMapper;
 import com.kubraevren.security.CustomUserDetails;
-import com.kubraevren.security.CustomUserDetailsService;
 import com.kubraevren.service.ExpenseService;
 import com.kubraevren.model.ExpenseEntity;
 import jakarta.validation.Valid;
@@ -26,7 +24,7 @@ public class ExpenseController {
     private final ExpenseMapper mapper;
 
     @PostMapping
-    public ResponseEntity createExpense(
+    public ResponseEntity createExpense(//veri ekleme HARCAMAA EKLE
             @Valid @RequestBody ExpenseCreateDto dto, // DTO'yu al, valide et [1, 2]
             @AuthenticationPrincipal CustomUserDetails principal) { // Kullanıcı ID'sini token'dan al [3]
 
@@ -44,7 +42,7 @@ public class ExpenseController {
 
 
 
-    @GetMapping
+    @GetMapping//VERİ OKUMA - listeleme
     public ResponseEntity<List<ExpenseDto>> getUserExpenses(
             @AuthenticationPrincipal CustomUserDetails principal
     ) {
@@ -52,7 +50,7 @@ public class ExpenseController {
 
         List<ExpenseEntity> expenses = expenseService.getExpensesByUserId(userId);//id'nin yaptığı harcamaları bul
 
-        // Entity → DTO çevir
+
         List<ExpenseDto> dtoList = expenses.stream()//her expenses nesnesini al dto ya çevir
                 .map(mapper::toDto)
                 .toList();
@@ -63,7 +61,7 @@ public class ExpenseController {
 
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") //veri güncelleme
     public ResponseEntity<ExpenseDto> updateExpense(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable Long id,
@@ -77,7 +75,7 @@ public class ExpenseController {
         return ResponseEntity.ok(mapper.toDto(updated));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")//veri silme
     public void deleteExpense(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable Long id
