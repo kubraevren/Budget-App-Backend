@@ -1,5 +1,7 @@
 package com.kubraevren.dto;
 
+import com.kubraevren.enums.Category;
+import com.kubraevren.enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,8 @@ public class ExpenseDto {
 
     private Long id; // harcama kaydının id'si
     private BigDecimal amount;
-    private String category;
+    private Category category;
+    private TransactionType transactionType;
     private String description;
     private LocalDate date;
 

@@ -1,5 +1,7 @@
 package com.kubraevren.dto;
 
+import com.kubraevren.enums.Category;
+import com.kubraevren.enums.TransactionType;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +21,11 @@ public class ExpenseCreateDto {
     @DecimalMin(value = "0.01", message = "Miktar en az 0.01 olmalıdır")
     private BigDecimal amount;
 
-    @NotBlank(message = "Kategori boş olamaz")
-    private String category;  // e.g., FOOD, TRANSPORT
+    @NotNull(message = "Kategori boş olamaz")
+    private Category category;  // e.g., FOOD, TRANSPORT
+
+    @NotNull(message = "İşlem tipi (Gelir/Gider) boş olamaz")
+    private TransactionType transactionType;
 
     private String description;  // Bu opsiyonel, validasyon gerekmez
 

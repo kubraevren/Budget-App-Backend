@@ -1,5 +1,7 @@
 package com.kubraevren.model;
 
+import com.kubraevren.enums.Category;
+import com.kubraevren.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,8 +33,13 @@ public class ExpenseEntity {
     @Column(length=255)
     private String description;
 
+    @Enumerated(EnumType.STRING) // ÖNEMLİ!
     @Column(nullable=false)
-    private String category; // e.g., FOOD, TRANSPORT, RENT, OTHER
+    private Category category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private TransactionType transactionType;
 
     @Column(nullable=false)
     private LocalDate date; // sadece tarih

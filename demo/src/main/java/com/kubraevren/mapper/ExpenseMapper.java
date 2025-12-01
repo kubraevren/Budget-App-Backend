@@ -49,6 +49,7 @@ public class ExpenseMapper {
         dto.setId(entity.getId());
         dto.setAmount(entity.getAmount());
         dto.setCategory(entity.getCategory());
+        dto.setTransactionType(entity.getTransactionType());
         dto.setDescription(entity.getDescription());
         dto.setDate(entity.getDate());
         return dto;
@@ -63,6 +64,7 @@ public class ExpenseMapper {
         entity.setCategory(dto.getCategory());
         entity.setDescription(dto.getDescription());
         entity.setDate(dto.getDate());
+        entity.setTransactionType(dto.getTransactionType());
         // User ve ID service katmanında set edilecek, burası boş kalabilir
         return entity;
     }

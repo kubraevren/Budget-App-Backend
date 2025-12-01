@@ -6,28 +6,29 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ResponseMessage {
 
-    // SUCCESS
+    // --- GENEL BAŞARI ---
     SUCCESS(HttpStatus.OK, "Başarılı."),
 
+    // --- AUTH (GİRİŞ/KAYIT) ---
     LOGIN_SUCCESS(HttpStatus.OK, "Giriş başarılı."),
+    USER_CREATED(HttpStatus.CREATED, "Kullanıcı başarıyla kayıt edildi."), // <-- Bunu geri ekledim!
     TOKEN_REFRESHED(HttpStatus.OK, "Token yenilendi."),
-    PRODUCT_UPDATED(HttpStatus.OK, "Ürün başarıyla güncellendi."),
-    PRODUCT_DELETED(HttpStatus.OK, "Ürün başarıyla silindi."),
 
-    USER_CREATED(HttpStatus.CREATED, "Kullanıcı başarıyla kayıt edildi."),
-    PRODUCT_ADDED(HttpStatus.CREATED, "Ürün başarıyla eklendi."),
+    // --- EXPENSE (HARCAMA/GELİR) ---
+    EXPENSE_CREATED(HttpStatus.CREATED, "Kayıt başarıyla eklendi."),
+    EXPENSE_UPDATED(HttpStatus.OK, "Kayıt güncellendi."),
+    EXPENSE_DELETED(HttpStatus.OK, "Kayıt silindi."),
 
-    // FAILURE
+    // --- HATALAR (FAILURE) ---
     EMAIL_OR_PASSWORD_INVALID(HttpStatus.UNAUTHORIZED, "E-mail veya Şifre Yanlış."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "Token süresi dolmuş."),
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "Token geçersiz."),
-    UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "Kullanıcı yetkisi yok."),
+    UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "Bu işlem için yetkiniz yok."),
 
     USER_ALREADY_REGISTERED(HttpStatus.CONFLICT, "Kullanıcı zaten kayıtlı."),
-    USER_ALREADY_ADDED(HttpStatus.CONFLICT, "Kullanıcı zaten ekli."),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "Kullanıcı Bulunamadı."),
-    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "Ürün Bulunamadı."),
+    EXPENSE_NOT_FOUND(HttpStatus.NOT_FOUND, "Harcama/Gelir kaydı bulunamadı."),
 
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Bir Sorun Oluştu. Lütfen daha sonra tekrar deneyiniz.");
 

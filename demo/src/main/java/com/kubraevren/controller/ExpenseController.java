@@ -5,6 +5,8 @@ import com.kubraevren.mapper.ExpenseMapper;
 import com.kubraevren.security.CustomUserDetails;
 import com.kubraevren.service.ExpenseService;
 import com.kubraevren.model.ExpenseEntity;
+import com.kubraevren.wrappper.ApiResponse;
+import com.kubraevren.wrappper.ResponseMessage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,18 +26,14 @@ public class ExpenseController {
     private final ExpenseMapper mapper;
 
     @PostMapping
-    public ResponseEntity createExpense(//veri ekleme HARCAMAA EKLE
-            @Valid @RequestBody ExpenseCreateDto dto, // DTO'yu al, valide et [1, 2]
-            @AuthenticationPrincipal CustomUserDetails principal) { // Kullanıcı ID'sini token'dan al [3]
-
-        // KRİTİK ADIM: Token'dan alınan kimlikten kullanıcı ID'sini çek
+    public ResponseEntity<ApiResponse<ExpenseDto>> createExpense(//veri ekleme HARCAMAA EKLE
+                                                                 @Valid @RequestBody ExpenseCreateDto dto,
+                                                                 @AuthenticationPrincipal CustomUserDetails principal) {
         Long userId = principal.getId();
-
-        // Servisi çağır ve harcamayı oluştur
         ExpenseEntity expense = expenseService.createExpense(userId, dto);
-
-        // Oluşturulan DTO'yu 201 Created status koduyla dön
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(expense));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(ResponseMessage.EXPENSE_CREATED, mapper.toDto(expense)));
     }
 
     // Diğer endpointler (GET, PUT, DELETE, SUMMARY) buraya gelecek [1]
@@ -43,26 +41,24 @@ public class ExpenseController {
 
 
     @GetMapping//VERİ OKUMA - listeleme
-    public ResponseEntity<List<ExpenseDto>> getUserExpenses(
+    public ResponseEntity<ApiResponse<List<ExpenseDto>>> getUserExpenses(
             @AuthenticationPrincipal CustomUserDetails principal
     ) {
         Long userId = principal.getId();
 
         List<ExpenseEntity> expenses = expenseService.getExpensesByUserId(userId);//id'nin yaptığı harcamaları bul
 
+        List<ExpenseDto> dtoList = mapper.toDtoList(expenses);//her expenses nesnesini al dto ya çevir
 
-        List<ExpenseDto> dtoList = expenses.stream()//her expenses nesnesini al dto ya çevir
-                .map(mapper::toDto)
-                .toList();
 
-        return ResponseEntity.ok(dtoList);
+        return ResponseEntity.ok(ApiResponse.success(ResponseMessage.SUCCESS,dtoList));
     }
 
 
 
 
     @PutMapping("/{id}") //veri güncelleme
-    public ResponseEntity<ExpenseDto> updateExpense(
+    public ResponseEntity<ApiResponse<ExpenseDto>> updateExpense(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable Long id,
             @Valid @RequestBody ExpenseCreateDto dto
@@ -72,16 +68,22 @@ public class ExpenseController {
 
         ExpenseEntity updated = expenseService.updateExpense(userId, id, dto);
 
-        return ResponseEntity.ok(mapper.toDto(updated));
+        return ResponseEntity.ok(ApiResponse.success(ResponseMessage.EXPENSE_UPDATED,mapper.toDto(updated)));
     }
 
     @DeleteMapping("/{id}")//veri silme
-    public void deleteExpense(
+    public ResponseEntity<ApiResponse<Void>> deleteExpense(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable Long id
     ){
         Long userId = principal.getId();//kullanıcının id'si
         expenseService.deleteExpenseById(id, userId);
+
+        return ResponseEntity.ok(ApiResponse.success(ResponseMessage.EXPENSE_DELETED, null));
     }
+
+    //findAllByUserId(...)
+    //findAllByUserIdAndDateBetween(...)
+    //findAllByUserIdAndCategory(...)
 
 }

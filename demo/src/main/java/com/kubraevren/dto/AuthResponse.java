@@ -13,6 +13,8 @@ public class AuthResponse {
 
     private String accessToken;
 
+    private String refreshToken; // YENİ EKLENDİ
+
     @Builder.Default // Builder kullanırken varsayılan değerin ezilmemesi için şart
     private String tokenType = "Bearer";
 
